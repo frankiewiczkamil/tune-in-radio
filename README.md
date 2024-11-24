@@ -1,50 +1,26 @@
-# React + TypeScript + Vite
+## Radio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Stack
 
-Currently, two official plugins are available:
+Project is written in Vite, React, Typescript and Tailwind. It was tested on Node.js v22.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Run
 
-## Expanding the ESLint configuration
+To run the project, you need to have Node.js installed. You can run it with:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+pnpm run dev # or pnpm or yarn, depending on your preferences
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+The `flake.nix` and `.env.rc` are for Nix+direnv users. You can ignore them, and use nvm or whatever you like.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Architecture
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- project does not use routing yet, but there already is a `pages` folder.
+  It can be easily converted to some SSR stack, keeping similar structure.
+- implementation is grouped by feature, not by type.
+- player logic is extracted to a custom hook, that takes `HTMLAudioElement` as an argument.
+  This way, some sort of fake implementation might be used for testing purposes.
+  However, for more complex logic, it would be better, to extract the core logic to a plain module,
+  decoupled also from the html document dependencies,
+  so testing would be easier and would not require `React Testing Library` or similar (hooks need it).
