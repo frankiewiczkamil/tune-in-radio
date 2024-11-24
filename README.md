@@ -16,11 +16,12 @@ The `flake.nix` and `.env.rc` are for Nix+direnv users. You can ignore them, and
 
 ### Architecture
 
-- project does not use routing yet, but there already is a `pages` folder.
+- The project does not use routing yet, but there already is a `pages` folder.
   It can be easily converted to some SSR stack, keeping similar structure.
-- implementation is grouped by feature, not by type.
-- player logic is extracted to a custom hook, that takes `HTMLAudioElement` as an argument.
-  This way, some sort of fake implementation might be used for testing purposes.
-  However, for more complex logic, it would be better, to extract the core logic to a plain module,
-  decoupled also from the html document dependencies,
-  so testing would be easier and would not require `React Testing Library` or similar (hooks need it).
+- Implementation is grouped by feature, not by type.
+- Player logic is extracted to a custom hook.
+  For more complex logic, it would be better, to extract the core logic to a plain module,
+  decoupled from the html document dependencies,
+  so testing would be easier and would not require _React Testing Library_ or similar (hooks need it).
+  In order to do that one can inject a fake impl of `HTMLAudioElement`, an appropriate type is already created (
+  `Audio`).

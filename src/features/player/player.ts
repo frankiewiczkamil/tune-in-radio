@@ -15,9 +15,9 @@ type Audio = {
   src: string;
 };
 
-export function usePlayer(audio: Audio) {
+export function usePlayer() {
   const { idle, playing, paused, loading, failed } = State;
-  const audioRef = useRef<Audio>(audio);
+  const audioRef = useRef<Audio>(new Audio());
   const [state, setState] = useState<StateType>(idle);
 
   function pause() {

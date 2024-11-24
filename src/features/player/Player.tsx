@@ -9,7 +9,7 @@ type PlayerProps = {
 };
 
 export function Player({ url, name }: Readonly<PlayerProps>) {
-  const { state, changeStream, pause, play, cleanUp } = usePlayer(new Audio());
+  const { state, changeStream, pause, play, cleanUp } = usePlayer();
 
   useEffect(function onInit() {
     return cleanUp;
