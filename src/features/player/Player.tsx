@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { usePlayer } from './player.ts';
+import { MessageByState } from './PlayoutMessage.tsx';
+import { CurrentButton } from './CurrentButton.tsx';
 
 type PlayerProps = {
   name?: string;
@@ -22,11 +24,9 @@ export function Player({ url, name }: Readonly<PlayerProps>) {
 
   return (
     <div className="flex basis-full justify-center">
-      <div className="flex flex-col content-center">
-        <div className="flex">{name ? `Playing: ${name}` : <br />}</div>
-        {['idle', 'stopped', 'error'].includes(state) && <button disabled>&#x23f5;</button>}
-        {state === 'playing' && <button onClick={pause}>&#x23f8;</button>}
-        {state === 'paused' && <button onClick={play}>&#x23f5;</button>}
+      <div className="flex flex-col content-center items-center">
+        <MessageByState state={state} name={name ?? ''} />
+        <CurrentButton state={state} play={play} pause={pause} />
       </div>
     </div>
   );
