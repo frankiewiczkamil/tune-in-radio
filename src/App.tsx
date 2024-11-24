@@ -1,10 +1,7 @@
-function App() {
+import { Stations } from './pages/Stations.tsx';
 
-    return (
-        <div className="text-3xl">
-            Init
-        </div>
-    )
+function App() {
+  return <Stations />;
 }
 
-export default App
+export default App;
