@@ -7,7 +7,7 @@ type PlayerProps = {
 };
 
 export function Player({ url, name }: Readonly<PlayerProps>) {
-  const { state, changeStation, pause, play, cleanUp } = usePlayer(new Audio());
+  const { state, changeStream, pause, play, cleanUp } = usePlayer(new Audio());
 
   useEffect(function onInit() {
     return cleanUp;
@@ -15,7 +15,7 @@ export function Player({ url, name }: Readonly<PlayerProps>) {
 
   useEffect(
     function onStationChange() {
-      url && changeStation(url);
+      url && changeStream(url);
     },
     [url]
   );

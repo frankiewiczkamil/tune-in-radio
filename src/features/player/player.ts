@@ -4,7 +4,7 @@ export const State = {
   idle: 'idle',
   playing: 'playing',
   paused: 'paused',
-  stopped: 'stopped',
+  loading: 'loading',
   failed: 'failed',
 } as const;
 export type StateType = (typeof State)[keyof typeof State];
@@ -16,37 +16,48 @@ type Audio = {
 };
 
 export function usePlayer(audio: Audio) {
-  const { idle, playing, paused, stopped, failed } = State;
+  const { idle, playing, paused, loading, failed } = State;
   const audioRef = useRef<Audio>(audio);
   const [state, setState] = useState<StateType>(idle);
 
   function pause() {
-    try {
-      audioRef.current.pause();
-      setState(paused);
-    } catch (error) {
-      setState(failed);
-      console.error(error);
+    if (state === playing) {
+      try {
+        audioRef.current.pause();
+        setState(paused);
+      } catch (error) {
+        onError(error);
+      }
+    } else {
+      console.log('Pause can be triggered only in playing state, but received', state);
     }
   }
 
   function play() {
-    audioRef.current
-      .play()
-      .then(() => setState(playing))
-      .catch(() => setState(failed));
+    if (state === paused) {
+      audioRef.current
+        .play()
+        .then(() => setState(playing))
+        .catch(onError);
+    } else {
+      console.log('Play can be triggered only in paused state, but received', state);
+    }
   }
 
-  async function changeStation(url: string) {
+  async function changeStream(url: string) {
+    // HTMLAudioElement does not have any mechanism to cancel loading, like AbortController
+    // in case of interruptions it raises AbortError, which seems harmless as it gracefully continues working
+    // so we allow changing stream in any state, as we want to handle the change immediately
+
     try {
-      setState(stopped);
+      setState(loading);
       audioRef.current.pause();
       audioRef.current.src = url!;
       await audioRef.current.play();
       setState(playing);
-    } catch (error) {
-      setState(failed);
-      console.error(error);
+      console.log('Playing', url);
+    } catch (error: unknown) {
+      onError(error);
     }
   }
 
@@ -55,5 +66,14 @@ export function usePlayer(audio: Audio) {
     audioRef.current.src = '';
   }
 
-  return { state, pause, play, changeStation, cleanUp };
+  function onError(error: unknown) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.log('Aborted', error);
+    } else {
+      setState(failed);
+      console.error(error);
+    }
+  }
+
+  return { state, pause, play, changeStream, cleanUp };
 }
