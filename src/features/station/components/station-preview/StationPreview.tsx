@@ -8,7 +8,7 @@ export function StationPreview({ name, imageUrl, description }: Readonly<Station
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-between">
-        <span>{name}</span>
+        <span className="text-3xl">{name}</span>
         <img src={imageUrl} alt={name} className="max-h-20 max-w-20" />
       </div>
       <div className="mt-12">{description}</div>

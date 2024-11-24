@@ -11,7 +11,9 @@ export function StationList({ stations, onStationPicked }: Readonly<StationListP
       <ul>
         {stations.map(({ id, name }) => (
           <li key={id}>
-            <button onClick={(_) => onStationPicked(id)}>{name}</button>
+            <button className="p-2 rounded hover:bg-stone-800 w-full text-left" onClick={(_) => onStationPicked(id)}>
+              {name}
+            </button>
           </li>
         ))}
       </ul>
