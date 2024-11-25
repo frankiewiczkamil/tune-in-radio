@@ -1,27 +1,15 @@
-import { useEffect } from 'react';
-import { usePlayer } from './player.ts';
+import { StateType } from './player.ts';
 import { MessageByState } from './PlayoutMessage.tsx';
 import { CurrentButton } from './CurrentButton.tsx';
 
 type PlayerProps = {
   name?: string;
-  url?: string;
+  state: StateType;
+  play: () => void;
+  pause: () => void;
 };
 
-export function Player({ url, name }: Readonly<PlayerProps>) {
-  const { state, changeStream, pause, play, cleanUp } = usePlayer();
-
-  useEffect(function onInit() {
-    return cleanUp;
-  }, []);
-
-  useEffect(
-    function onStationChange() {
-      url && changeStream(url);
-    },
-    [url]
-  );
-
+export function Player({ name, pause, play, state }: Readonly<PlayerProps>) {
   return (
     <div className="flex basis-full justify-center">
       <div className="flex flex-col content-center items-center">
